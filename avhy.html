@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cute Message 💕</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #fff0f6, #ffe6f0);
+      font-family: "Segoe UI", Arial, sans-serif;
+      text-align: center;
+      overflow: hidden;
+    }
+    /* bouncing bear + yearning */
+    #sad {
+      font-size: 50px;
+      margin-bottom: 15px;
+      animation: bounce 1s infinite alternate;
+      transition: opacity 0.6s ease;
+    }
+    @keyframes bounce {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-10px); }
+    }
+    #message {
+      font-weight: bold;
+      color: #d6336c;
+      opacity: 0;
+      transform: scale(0.5);
+      transition: all 0.8s ease;
+      margin-bottom: 20px;
+    }
+    #btn {
+      padding: 12px 20px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      background: #f783ac;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+      z-index: 10;
+    }
+    #btn:hover {
+      background: #e64980;
+    }
+    #final {
+      font-size: 40px;
+      font-weight: bold;
+      color: #c2255c;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: all 0.8s ease;
+      display: none;
+    }
+    /* heartbeat animation */
+    .heartbeat {
+      animation: beat 1.2s infinite;
+    }
+    @keyframes beat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+    /* floating emojis */
+    .floaty {
+      position: absolute;
+      font-size: 20px;
+      opacity: 0.9;
+      pointer-events: none;
+      transition: transform 2.5s ease-out, opacity 2.5s ease-out;
+    }
+    .show {
+      opacity: 1 !important;
+      transform: scale(1) !important;
+    }
+  </style>
+</head>
+<body>
+  <div id="sad">🐻🥺</div>
+  <div id="message"></div>
+  <button id="btn">Tap me</button>
+  <div id="final">I miss you, langgaaa 🥺</div>
+
+  <script>
+    const sad = document.getElementById("sad");
+    const message = document.getElementById("message");
+    const btn = document.getElementById("btn");
+    const final = document.getElementById("final");
+
+    let count = 0;
+    const btnTexts = [
+      "Tap me",
+      "Again 😏",
+      "One more 😘",
+      "Keep going 😍",
+      "Almost there 🙃",
+      "Last one (promise 😉)"
+    ];
+
+    const cutesy = ["💖","💕","🥰","😘","🌸","✨","💞","💓"];
+
+    btn.addEventListener("click", () => {
+      if (count === 0) {
+        // Hide bear + yearning on first tap
+        sad.style.opacity = "0";
+        setTimeout(() => sad.style.display = "none", 600);
+      }
+
+      if (count < 6) {
+        count++;
+        message.classList.remove("show");
+        void message.offsetWidth; // reset transition
+        let size = 30 + count * 15; // gets much bigger
+        message.style.fontSize = size + "px";
+        message.textContent = "Hi, bab" + "y".repeat(count);
+        message.classList.add("show");
+
+        // Button text change
+        if (btnTexts[count]) {
+          btn.textContent = btnTexts[count];
+        }
+
+        // Floating cutesy emojis (6 per tap, smooth scatter)
+        for (let i = 0; i < 6; i++) {
+          const floaty = document.createElement("div");
+          floaty.classList.add("floaty");
+          floaty.textContent = cutesy[Math.floor(Math.random() * cutesy.length)];
+          floaty.style.left = Math.random() * window.innerWidth + "px";
+          floaty.style.top = Math.random() * window.innerHeight + "px";
+          floaty.style.fontSize = (20 + Math.random() * 25) + "px";
+          document.body.appendChild(floaty);
+
+          // Smooth scatter
+          requestAnimationFrame(() => {
+            floaty.style.transform = `translate(${(Math.random()-0.5)*200}px, ${(Math.random()-0.5)*200}px) scale(1.5)`;
+            floaty.style.opacity = "0";
+          });
+
+          setTimeout(() => floaty.remove(), 2600);
+        }
+      }
+
+      if (count === 6) {
+        btn.style.display = "none";
+        message.style.display = "none";
+        final.style.display = "block";
+        setTimeout(() => {
+          final.classList.add("show", "heartbeat");
+        }, 100);
+      }
+    });
+  </script>
+</body>
+</html>
